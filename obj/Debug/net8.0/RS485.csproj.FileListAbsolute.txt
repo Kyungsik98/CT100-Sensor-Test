@@ -1,0 +1,14 @@
+C:\Users\admin\Desktop\c# test\RS485\bin\Debug\net8.0\RS485.exe
+C:\Users\admin\Desktop\c# test\RS485\bin\Debug\net8.0\RS485.deps.json
+C:\Users\admin\Desktop\c# test\RS485\bin\Debug\net8.0\RS485.runtimeconfig.json
+C:\Users\admin\Desktop\c# test\RS485\bin\Debug\net8.0\RS485.dll
+C:\Users\admin\Desktop\c# test\RS485\bin\Debug\net8.0\RS485.pdb
+C:\Users\admin\Desktop\c# test\RS485\obj\Debug\net8.0\RS485.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\Desktop\c# test\RS485\obj\Debug\net8.0\RS485.AssemblyInfoInputs.cache
+C:\Users\admin\Desktop\c# test\RS485\obj\Debug\net8.0\RS485.AssemblyInfo.cs
+C:\Users\admin\Desktop\c# test\RS485\obj\Debug\net8.0\RS485.csproj.CoreCompileInputs.cache
+C:\Users\admin\Desktop\c# test\RS485\obj\Debug\net8.0\RS485.dll
+C:\Users\admin\Desktop\c# test\RS485\obj\Debug\net8.0\refint\RS485.dll
+C:\Users\admin\Desktop\c# test\RS485\obj\Debug\net8.0\RS485.pdb
+C:\Users\admin\Desktop\c# test\RS485\obj\Debug\net8.0\RS485.genruntimeconfig.cache
+C:\Users\admin\Desktop\c# test\RS485\obj\Debug\net8.0\ref\RS485.dll
