@@ -49,11 +49,12 @@ namespace Robo_R.CT100.Driver
             dataFrame.Add(commandCodes[1]); // Register Address (High)
             dataFrame.Add(commandCodes[0]); // Register Address (Low)
 
-            //var ChangeParameter16= Byte.Parse( Convert.ToString(ChangeParameter,16));
+            // var ChangeParameter16= Byte.Parse( Convert.ToString(ChangeParameter,16));
 
+            var ChangeParameter16= BitConverter.GetBytes(ChangeParameter);
             dataFrame.Add(0x00); // Register Count (High)
-            //dataFrame.Add(ChangeParameter16); // Register Count (Low) / ID : Using 1~200 / Emissivity : Using 10~100
-            dataFrame.Add(ChangeParameter);
+            dataFrame.Add(ChangeParameter16[0]); // Register Count (Low) / ID : Using 1~200 / Emissivity : Using 10~100
+            //dataFrame.Add(ChangeParameter);
 
             var crc = CRC16.CalculateCRC(dataFrame.ToArray());
             dataFrame.AddRange(crc);

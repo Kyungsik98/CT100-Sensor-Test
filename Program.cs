@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using System.IO.Ports;
+using System.Reflection.Metadata;
 using Robo_R.CT100.Components;
 using Robo_R.CT100.Driver;
 
@@ -9,6 +10,7 @@ namespace Communication
     {
         private static SerialPort _serialPort = new SerialPort();
         private static CT100Driver _ct100Driver = new CT100Driver();
+        private static Logger logger = new Logger("C:/Users/admin/Desktop/c# test/log.txt");
         static void Main(string[] args)
         {   
              var SenddataFrame = new List<byte>();
@@ -23,82 +25,67 @@ namespace Communication
 
             _serialPort.Open();
             Console.WriteLine("Serial Port Opened");
+
+           
             
-            for(int i = 0; i < 5; i++)
+            for(int i = 0; i < 100; i++)
             {
-                //---set 방사율 data-----
-                // SenddataFrame.Add(0x01);
-                // SenddataFrame.Add(0x06);
-                // SenddataFrame.Add(0x9C);
-                // SenddataFrame.Add(0x41);
-                // SenddataFrame.Add(0x00);
-                // SenddataFrame.Add(0x50);
 
-                //---get temperature---
-                // SenddataFrame.Add(0x01);
-                // SenddataFrame.Add(0x03);
-                // SenddataFrame.Add(0x9C);
-                // SenddataFrame.Add(0x42);
-                // SenddataFrame.Add(0x00);
-                // SenddataFrame.Add(0x02);
+                try 
+                {   // 시리얼 버퍼에 남아있는 잔여 데이터 제거
+                    while (_serialPort.BytesToRead > 0)
+                    {
+                        _= _serialPort.ReadByte();
+                    }
+                }
 
-                
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
 
+                finally
+                {
+                    _serialPort.Write(CT100Driver.MakeReadDataFrame(CT100Address.ObjectTemperature),0,8);
 
-                // var CRC = CRC16.CalculateCRC(SenddataFrame.ToArray());
-                // SenddataFrame.AddRange(CRC);          
-
-                // for(int i = 0; i < 8; i++)
-                // {
-                //     Console.WriteLine("Send: "+SenddataFrame[i]);
-                // }
-                //_serialPort.Write(SenddataFrame.ToArray(),0,8);
-                
-
-                // //동작 확인
-                 //_serialPort.Write(CT100Driver.MakeWriteDataFrame(CT100Address.ChangeEmissivity,80),0,8);
-
-                //_serialPort.Write(CT100Driver.MakeWriteDataFrame(CT100Address.ChangeDeviceID,1),0,8);
-
-                _serialPort.Write(CT100Driver.MakeReadDataFrame(CT100Address.ObjectTemperature),0,8);
-
-
-                // for(int j = 0; j < 9 ; j++)
-                // {   
-                //     var readByte = _serialPort.ReadByte();
-                //     ReceivedDataFrame.Add((byte)readByte);
-                //     Console.WriteLine("Received: " + readByte);
-                // }
-
+                    //_serialPort.Write(CT100Driver.MakeWriteDataFrame(CT100Address.ChangeEmissivity,80),0,8);
+                    
+                }
 
                 //통신 응답 받기 위한 대기 (없으면 데이터 안받아옴)
-                Thread.Sleep(100);
-
-                while(_serialPort.BytesToRead > 0)
+                //Thread.Sleep(100);
+                bool flag = false;
+                Thread.Sleep(1000);
+                
+                while(flag == false)
                 {   
-                    var readByte = _serialPort.ReadByte();
-                    ReceivedDataFrame.Add((byte)readByte);
-                    Console.WriteLine("Received: " + readByte);
+                    
+                    while(_serialPort.BytesToRead > 0)
+                    {
+                        var readByte = _serialPort.ReadByte();
+                        ReceivedDataFrame.Add((byte)readByte);
+                        Console.WriteLine("Received: " + readByte);
+                    }
+
+                    flag = true;
+
                 }
 
                 double temperature = (ReceivedDataFrame[3] * 256 + ReceivedDataFrame[4]) * 0.02 - 273.15;
                 double PCBtemperature = (ReceivedDataFrame[5] * 256 + ReceivedDataFrame[6]) * 0.02 - 273.15;
                 
+                logger.Log(temperature.ToString());
+                
+                Console.Write(DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss "));
                 Console.WriteLine(i+1 + "Temperature: " + Math.Round(temperature,3)+"°C");
                 Console.WriteLine(i+1 + "PCB Temperature: " + Math.Round(PCBtemperature,3)+"°C");
 
                 ReceivedDataFrame.Clear();
-                
-                Thread.Sleep(500);
-                
             }
 
             
             _serialPort.Close();
             Console.WriteLine("Serial Port Closed");
-
-            
-
             
         }
         
