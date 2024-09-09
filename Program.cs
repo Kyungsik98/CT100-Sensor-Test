@@ -47,7 +47,6 @@ namespace Communication
                 finally
                 {
                     _serialPort.Write(CT100Driver.MakeReadDataFrame(CT100Address.ObjectTemperature),0,8);
-
                     //_serialPort.Write(CT100Driver.MakeWriteDataFrame(CT100Address.ChangeEmissivity,80),0,8);
                     
                 }
